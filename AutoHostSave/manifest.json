@@ -1,0 +1,10 @@
+﻿{
+  "Name": "Auto Host Save",
+  "Author": "FlashyReese",
+  "Version": "1.0.0",
+  "Description": "Automatically hosts a new game or last game",
+  "UniqueID": "FlashyReese.AutoHostSave",
+  "EntryDll": "AutoHostSave.dll",
+  "MinimumApiVersion": "3.0.0",
+  "UpdateKeys": ["GitHub:FlashyReese/AutoHostSave"]
+}
