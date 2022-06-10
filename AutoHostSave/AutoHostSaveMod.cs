@@ -14,6 +14,7 @@ namespace AutoHostSave
         private bool _loggedInviteCode;
         private ModConfig _modConfig;
         private int _wait;
+        private bool _loaded;
 
         public override void Entry(IModHelper helper)
         {
@@ -38,7 +39,7 @@ namespace AutoHostSave
 
         private void WaitUntilReady(object sender, UpdateTickedEventArgs e)
         {
-            if (Game1.activeClickableMenu is not TitleMenu) return;
+            if (_loaded && Game1.activeClickableMenu is not TitleMenu) return;
 
             if (_wait <= 0)
                 LoadLastGameOrStartNewGame();
@@ -80,6 +81,7 @@ namespace AutoHostSave
 
         private void StartFirstDay()
         {
+            Game1.startingCabins = _modConfig.Cabins;
             Game1.multiplayerMode = 2;
             Game1.loadForNewGame();
             Game1.player.Position = GetDefaultSpawnPosition();
@@ -103,8 +105,14 @@ namespace AutoHostSave
             Game1.exitActiveMenu();
 
             Game1.eventUp = false;
-            Game1.dayOfMonth = 1;
+            Game1.eventOver = false;
+            Game1.farmEvent = null;
+            Game1.dayOfMonth = 0;
             Game1.setGameMode(3);
+            Game1.NewDay(600f);
+            if (Game1.currentLocation.currentEvent == null) return;
+            Game1.currentLocation.currentEvent.cleanup();
+            Game1.currentLocation.currentEvent = null;
         }
 
         private void LoadLastGameOrStartNewGame()
@@ -121,6 +129,7 @@ namespace AutoHostSave
                         LogLevel.Warn);
                     InitializeCharacter();
                     StartFirstDay();
+                    _loaded = true;
                     return;
                 }
 
@@ -129,6 +138,7 @@ namespace AutoHostSave
                     Monitor.Log("Loading Save: " + file, LogLevel.Info);
                     SaveGame.Load(file);
                     if (Game1.activeClickableMenu is TitleMenu m) m.exitThisMenu(false);
+                    _loaded = true;
                 }
                 catch (Exception ex)
                 {
@@ -140,6 +150,7 @@ namespace AutoHostSave
             {
                 InitializeCharacter();
                 StartFirstDay();
+                _loaded = true;
             }
         }
     }

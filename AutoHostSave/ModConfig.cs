@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace AutoHostSave
 {
@@ -20,5 +20,6 @@ namespace AutoHostSave
         public Color PantsColor { get; set; } = new(0, 0, 0);
         public bool CatPerson { get; set; } = false;
         public int PetBreed { get; set; } = 1;
+        public int Cabins { get; set; } = 4;
     }
 }
